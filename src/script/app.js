@@ -1,6 +1,7 @@
 import './../styles/app.scss'
 import {Person} from './model/Person'
 import ChainDraw from './chaindraw/ChainDraw'
+import ChainDrawPlayer from './chaindraw/ChainDrawPlayer'
 var p = new Person("Jérémie","Sellam23")
 document.write(p.getFullName());
 
@@ -24,8 +25,46 @@ const greyStyle = {
   strokeStyle:"rgba(230,230,234,0.1)"
 }
 
-
 var chainDraw = new ChainDraw(300,300,cyanStyle)
+
+
+new ChainDrawPlayer('#mychain',300,300,(chainDraw,k) => {
+  chainDraw
+  .reset()
+  .clearLayer('default')
+  //.clearLayer('extremity')
+  //.clearLayer('extremity2')
+  .layer('default')
+  .moveTo(150,150)
+  .rotate(k/100)
+  .repeat(8)
+    .rotate(Math.PI/8*2)
+    .newThread(yellowStyle)
+      .forward(Math.cos(k*0.02)*50+50)
+      //.rotate(k/100)
+      .forward(15)
+      .layer('extremity')
+      .forward(10)
+      //.layer('extremity2')
+      //.rotate(k/10)
+      .forward(10)
+      .rotate(k/10)
+      .newThread(redStyle)
+        .forward(10)
+        .endThread()
+        .newThread(cyanStyle)
+          .rotate(k/23)
+          .forward(10)
+          .endThread()
+  
+      .layer('default')
+      .endThread()
+    .endRepeat()
+  .end()
+})
+
+/*
+
 
 var body = document.getElementsByTagName("body")[0];
 body.appendChild(chainDraw.canvas);
@@ -33,10 +72,12 @@ body.appendChild(chainDraw.canvas);
 
 
 var k = 0
+*/
 
 
 
 
+/*
 const animate = () => {
 chainDraw
   .reset()
@@ -50,12 +91,12 @@ chainDraw
     .rotate(Math.PI/8*2)
     .newThread(yellowStyle)
       .forward(Math.cos(k*0.02)*50+50)
-      .rotate(k/100)
+      //.rotate(k/100)
       .forward(15)
       .layer('extremity')
       .forward(10)
       //.layer('extremity2')
-      .rotate(k/10)
+      //.rotate(k/10)
       .forward(10)
       .rotate(k/10)
       .newThread(redStyle)
@@ -76,3 +117,4 @@ chainDraw
 
 animate()
 
+*/
