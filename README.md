@@ -1,2 +1,2 @@
-# chaindraw
-A Procedural draw tool chain based
+# es6-lite-boilerplate
+es6 lite boilerplate
