@@ -8,15 +8,24 @@ document.write(p.getFullName());
 
 
 
+const cyanStyle = {
+  strokeStyle:"rgba(42,183,202,0.1)"
+}
+
 const redStyle = {
-  strokeStyle:"rgba(255,0,0,0.1)"
+  strokeStyle:"rgba(254,74,73,0.1)"
 }
 
-const blueStyle = {
-  strokeStyle:"rgba(0,0,255,0.1)"
+const yellowStyle = {
+  strokeStyle:"rgba(254,215,102,0.1)"
 }
 
-var chainDraw = new ChainDraw(300,300,redStyle)
+const greyStyle = {
+  strokeStyle:"rgba(230,230,234,0.1)"
+}
+
+
+var chainDraw = new ChainDraw(300,300,cyanStyle)
 
 var body = document.getElementsByTagName("body")[0];
 body.appendChild(chainDraw.canvas);
@@ -39,7 +48,7 @@ chainDraw
   .rotate(k/100)
   .repeat(8)
     .rotate(Math.PI/8*2)
-    .newThread()
+    .newThread(yellowStyle)
       .forward(Math.cos(k*0.02)*50+50)
       .rotate(k/100)
       .forward(15)
@@ -49,9 +58,13 @@ chainDraw
       .rotate(k/10)
       .forward(10)
       .rotate(k/10)
-      .newThread(blueStyle)
+      .newThread(redStyle)
         .forward(10)
         .endThread()
+        .newThread(cyanStyle)
+          .rotate(k/23)
+          .forward(10)
+          .endThread()
 
       .layer('default')
       .endThread()
