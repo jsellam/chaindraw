@@ -25,7 +25,7 @@ Object.keys(demos).forEach(key => {
   var demo = demos[key]
   
   var encoder = new GIFEncoder(300, 300);
-  encoder.createReadStream().pipe(fs.createWriteStream('dist/static/'+key+'.gif'));
+  encoder.createReadStream().pipe(fs.createWriteStream('static/'+key+'.gif'));
   encoder.start();
   encoder.setRepeat(0);   // 0 for repeat, -1 for no-repeat
   encoder.setDelay(120);  // frame delay in ms
@@ -46,7 +46,12 @@ Object.keys(demos).forEach(key => {
     }
   }
  encoder.finish();
+
+ const out = fs.createWriteStream('static/'+key+'.jpg')
+var stream = chainDraw.canvas.createJPEGStream()
+stream.pipe(out)
+
  var template = fs.readFileSync('tool/template.html','utf8')
  template = template.replace(/{title}/g, key)
- fs.writeFileSync('dist/'+key+'.html',template,'utf8')
+ fs.writeFileSync('static/'+key+'.html',template,'utf8')
 })

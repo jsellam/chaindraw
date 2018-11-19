@@ -2,19 +2,20 @@ import ChainDraw from './ChainDraw'
 
 
 export default class ChainDrawPlayer {
-  constructor(parentSelector,defaultStyle,width,height,render)
+  constructor(parentSelector,width,height,render)
   {
 
     this.clickPlay = this.clickPlay.bind(this)
     this.onBlur = this.onBlur.bind(this)
     this.animate = this.animate.bind(this)
 
-    this.chainDraw = new ChainDraw(width,height,defaultStyle)
+    this.chainDraw = new ChainDraw(width,height)
     this.render = render
     
     let parent = document.querySelector(parentSelector)
 
     this.container = document.createElement('div')
+    this.container.className = "chain-draw-player"
     parent.appendChild(this.container)
     this.container.style.position = "relative"
     this.container.style.width = width+"px"
@@ -84,37 +85,6 @@ export default class ChainDrawPlayer {
   }
 
 
-  downloadGif(startFrame=0, endFrame=100,step=10)
-  {
-    console.log("canvas width",this.chainDraw)
-    
-    var gif = new GIF({
-     
-      quality: 4,
-      width: this.chainDraw.canvas.width,
-      height: this.chainDraw.canvas.height,
-    });
-    var i
-    for(i=0;i<startFrame;i++) {
-      this.render(this.chainDraw,i)
-    }
-    var k = 0
-    for(i=startFrame;i<endFrame;i++){
-      this.render(this.chainDraw,i)
-      if(k+step === 0 ) gif.addFrame(this.chainDraw.layers.default, {copy: true});
-      k++
-    }
-
-    gif.on('finished', function(blob) {
-      window.open(URL.createObjectURL(blob));
-    });
-     
-    gif.render();
-
-
-    
-
-  }
 
 
 

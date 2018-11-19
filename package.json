@@ -4,7 +4,7 @@
   "description": "es6 lite boilerplate",
   "main": "index.js",
   "scripts": {
-    "build": "webpack && yarn generate",
+    "build": "webpack",
     "watch": "cross-env NODE_ENV=development node_modules/webpack/bin/webpack.js --watch --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
     "hot": "webpack-dev-server",
     "generate": "node tool/generategif"
