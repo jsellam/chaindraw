@@ -1,15 +1,14 @@
 import * as drawActions from './DrawActions'
 import Cursor from './Cursor'
 export default class ChainDraw {
-  constructor(width,height,styles={})
+  constructor(width,height,styles={},canvasCreator=null)
   {
     
     this.width = width
     this.height = height
     this.baseStyles = styles
-    this.canvas = document.createElement('canvas');
-    this.canvas.width = this.width
-    this.canvas.height = this.height
+    this.canvasCreator = canvasCreator
+    this.canvas = this.createCanvas(this.width,this.height)
    
     this.chain = []
     this.repeats = []
@@ -23,6 +22,30 @@ export default class ChainDraw {
     //this.currentLayer.strokeStyle="#FF0000";
     this._applyStyle(this.currentLayer,this.cursor.styles)
 
+  }
+
+
+  createCanvas(width,height)
+  {
+    if(this.canvasCreator)
+    {
+      return this.canvasCreator(width,height)
+    }
+    var canvas = document.createElement('canvas');
+    canvas.width = width
+    canvas.height = height
+    return canvas
+  }
+
+
+  clear()
+  {
+    Object.keys(this.layers).forEach(layerName => {
+      var ctx = this.layers[layerName]
+      ctx.clearRect(0,0,this.canvas.width,this.canvas.height)
+      ctx.beginPath()
+  })
+    
   }
 
   reset()
@@ -41,13 +64,17 @@ export default class ChainDraw {
   layer(layerName)
   {
     if(this.layers[layerName] === undefined) {
-      var canvas = document.createElement('canvas');
-      canvas.width = this.width
-      canvas.height = this.height
+      var canvas = this.createCanvas(this.width,this.height)
       this.layers[layerName] = canvas.getContext("2d")
       this.layers[layerName].beginPath()
     }
     this.chain.push(drawActions.layer(layerName))
+    return this
+  }
+
+  ctx(ctxFunc)
+  {
+    this.chain.push(drawActions.ctx(ctxFunc))
     return this
   }
 
@@ -63,9 +90,16 @@ export default class ChainDraw {
     return this
   }
 
+
   forward(length)
   {
     this.chain.push(drawActions.forward(length))
+    return this
+  }
+
+  translate(length)
+  {
+    this.chain.push(drawActions.translate(length))
     return this
   }
 
@@ -138,6 +172,10 @@ export default class ChainDraw {
           this.cursor.forward(item.length)
           this.currentLayer.lineTo(this.cursor.x,this.cursor.y)
           break
+        case 'translate':
+          this.cursor.forward(item.length)
+          this.currentLayer.moveTo(this.cursor.x,this.cursor.y)
+          break
         case 'move_to':
           this.cursor.setPosition(item.x,item.y)
           //this.currentLayer.beginPath();
@@ -167,6 +205,9 @@ export default class ChainDraw {
           this.currentLayer = this.layers[item.layerName]
           this._applyStyle(this.currentLayer,this.cursor.styles)
           this.currentLayer.moveTo(this.cursor.x,this.cursor.y)
+          break
+        case 'ctx':
+          item.ctxFunc(this.currentLayer,this.cursor.x,this.cursor.y)
           break
       }
     }

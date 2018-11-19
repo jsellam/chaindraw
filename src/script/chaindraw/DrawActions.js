@@ -9,4 +9,5 @@ export const repeat = count => ({type:'repeat',count:count})
 export const endRepeat = targetIndex => ({type:'end_repeat',targetIndex:targetIndex})
 export const clearLayer = layerName => ({type:'clear_layer',layerName:layerName})
 export const layer = layerName => ({type:'layer',layerName:layerName})
-
+export const translate = length => ({type:'translate',length:length})
+export const ctx = ctxFunc => ({type:'ctx',ctxFunc:ctxFunc})
